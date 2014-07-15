@@ -50,32 +50,44 @@ RSpec.describe Solid do
   describe "#to_s" do
     subject { instance.to_s }
 
-    let(:instance) do
-      described_class.parse input
+    context "with an ascii stl file" do
+      let(:instance) do
+        described_class.parse input
+      end
+
+      let(:input) do
+        input  = "solid y-axis-spacer\n"
+        input += "facet normal 0.0 0.0 -1.0\n"
+        input += "outer loop\n"
+        input += "vertex 16.5 0.0 -0.75\n"
+        input += "vertex 0.0 -9.5 -0.75\n"
+        input += "vertex 0.0 0.0 -0.75\n"
+        input += "endloop\n"
+        input += "endfacet\n"
+        input += "facet normal -0.0 1.0 0.0\n"
+        input += "outer loop\n"
+        input += "vertex 0.0 -1.87 0.0\n"
+        input += "vertex 16.5 -1.87 -0.13\n"
+        input += "vertex 0.0 -1.87 -0.13\n"
+        input += "endloop\n"
+        input += "endfacet\n"
+        input += "endsolid y-axis-spacer\n"
+        input
+      end
+
+      it "should output a string representation exactly the same as the input" do
+        should eq input
+      end
     end
 
-    let(:input) do
-      input  = "solid y-axis-spacer\n"
-      input += "facet normal 0.0 0.0 -1.0\n"
-      input += "outer loop\n"
-      input += "vertex 16.5 0.0 -0.75\n"
-      input += "vertex 0.0 -9.5 -0.75\n"
-      input += "vertex 0.0 0.0 -0.75\n"
-      input += "endloop\n"
-      input += "endfacet\n"
-      input += "facet normal -0.0 1.0 0.0\n"
-      input += "outer loop\n"
-      input += "vertex 0.0 -1.87 0.0\n"
-      input += "vertex 16.5 -1.87 -0.13\n"
-      input += "vertex 0.0 -1.87 -0.13\n"
-      input += "endloop\n"
-      input += "endfacet\n"
-      input += "endsolid y-axis-spacer\n"
-      input
-    end
+    context "with a binary stl file" do
+      let(:instance) do
+        described_class.parse_binary fixture("test_binary_cube.stl").read
+      end
 
-    it "should output a string representation exactly the same as the input" do
-      should eq input
+      it "should output a string representation" do
+        should be_a String
+      end
     end
   end
 

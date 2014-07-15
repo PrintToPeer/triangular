@@ -95,6 +95,7 @@ module Triangular
       solid = new 'm_0'
       string.unpack('C80L1' + 'f12S1' * facets_count)[81..-1].each_slice(13) do |fs|
         facet = Facet.new
+        facet.normal = Vector.new fs[0], fs[1], fs[2]
         fs[3..-2].each_slice(3) do |x, y, z|
           facet.vertices << Vertex.new(x, y, z)
         end
