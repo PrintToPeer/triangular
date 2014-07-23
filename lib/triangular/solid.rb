@@ -86,13 +86,14 @@ module Triangular
       solid.facets = Facet.parse(string.gsub(partial_pattern, ""))
       
       solid
-    rescue ArgumentError
+    rescue
       parse_binary(string)
     end
 
     def self.parse_binary(string)
+      name = string.unpack('C80').select{ |c| !c.nil? }.pack('c*')
       facets_count = string.unpack('C80L1').last
-      solid = new 'm_0'
+      solid = new name
       string.unpack('C80L1' + 'f12S1' * facets_count)[81..-1].each_slice(13) do |fs|
         facet = Facet.new
         facet.normal = Vector.new fs[0], fs[1], fs[2]
@@ -102,6 +103,22 @@ module Triangular
         solid.facets << facet
       end
       solid
+    end
+
+    def to_b
+      output = @name.bytes
+      output += [0] * (80 - output.count)
+      output << @facets.count
+
+      @facets.each do |f|
+        output += [f.normal.x, f.normal.y, f.normal.z]
+        f.vertices.each do |v|
+          output += [v.x, v.y, v.z]
+        end
+        output << 0
+      end
+
+      output.pack('C80L1' + 'f12S1' * facets.count).force_encoding("ASCII")
     end
 
     def to_inc

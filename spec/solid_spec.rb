@@ -91,6 +91,22 @@ RSpec.describe Solid do
     end
   end
 
+  describe "#to_b" do
+    subject { instance.to_b }
+
+    let(:input) do
+      fixture("test_binary_cube.stl").read
+    end
+
+    let(:instance) do
+      described_class.parse_binary input
+    end
+
+    it "should be able to roundtrip a binary stl file" do
+      should eq input.force_encoding("ASCII")
+    end
+  end
+
   describe "#slice_at_z" do
     subject { instance.slice_at_z 0 }
     let(:instance) { Solid.parse(File.open("#{File.dirname(__FILE__)}/fixtures/test_cube.stl").read) }
