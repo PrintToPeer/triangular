@@ -95,7 +95,7 @@ RSpec.describe Solid do
     subject { instance.to_b }
 
     let(:input) do
-      fixture("test_binary_cube.stl").read
+      fixture("huge_binary.stl").read
     end
 
     let(:instance) do

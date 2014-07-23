@@ -109,16 +109,18 @@ module Triangular
       output = @name.bytes
       output += [0] * (80 - output.count)
       output << @facets.count
+      output = output.pack('C80L1')
 
       @facets.each do |f|
-        output += [f.normal.x, f.normal.y, f.normal.z]
+        facet = [f.normal.x, f.normal.y, f.normal.z]
         f.vertices.each do |v|
-          output += [v.x, v.y, v.z]
+          facet += [v.x, v.y, v.z]
         end
-        output << 0
+        facet << 0
+        output << facet.pack('f12S1')
       end
 
-      output.pack('C80L1' + 'f12S1' * facets.count).force_encoding("ASCII")
+      output.force_encoding("ASCII")
     end
 
     def to_inc
