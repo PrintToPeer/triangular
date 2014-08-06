@@ -7,7 +7,7 @@ RSpec.describe Facet do
     context "with a correctly formatted facet" do
       let(:text) do
         <<-EOD
-          facet normal 0.0 0.0 -1.0
+          facet normal 0 0 -1
           outer loop
           vertex 16.5 0.0 -0.75
           vertex 0.0 -9.5 -0.75
